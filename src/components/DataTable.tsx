@@ -7,9 +7,9 @@ interface DataTableProps {
 	selectedIndex?: number;
 }
 
-function truncate(str: string, maxLength: number): string {
-	if (str.length <= maxLength) return str;
-	return `${str.slice(0, maxLength - 3)}...`;
+function preview(str: string): string {
+	// A preview occupies one row; the expanded example retains its whitespace.
+	return str.replace(/\s+/g, ' ');
 }
 
 export function DataTable({
@@ -26,7 +26,9 @@ export function DataTable({
 			<Box borderStyle="single" paddingX={1}>
 				{headers.map((header, i) => (
 					<Box key={header} width={widths[i]} marginRight={1}>
-						<Text bold>{truncate(header, widths[i])}</Text>
+						<Text bold wrap="truncate-end">
+							{preview(header)}
+						</Text>
 					</Box>
 				))}
 			</Box>
@@ -44,8 +46,11 @@ export function DataTable({
 							width={widths[cellIndex]}
 							marginRight={1}
 						>
-							<Text color={selectedIndex === rowIndex ? 'yellow' : undefined}>
-								{truncate(cell, widths[cellIndex])}
+							<Text
+								color={selectedIndex === rowIndex ? 'yellow' : undefined}
+								wrap="truncate-end"
+							>
+								{preview(cell)}
 							</Text>
 						</Box>
 					))}
